@@ -51,5 +51,17 @@ describe("Cypress basics", () => {
       .click()
       .should('have.value',"Obrigado!");
 
+       //Usado para permitir a depuração no navegador a partir deste ponto
+       //Informações são impressas no console
+      cy.title()
+      .should('be.equal',"Campo de Treinamento")
+      .debug()
+
+      cy.pause(); //Usado para permitir o acompanhamento passo-a-passo dos testes
+      cy.title()
+        .should('be.equal',"Campo de Treinamento")
+      cy.get('#buttonSimple')
+        .should('have.value',"Obrigado!")
+
   })
 });
