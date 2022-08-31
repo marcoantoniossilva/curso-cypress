@@ -101,4 +101,68 @@ describe("", () => {
     cy.reload();
     cy.get("#buttonCount").click().click().should("have.value", "111");
   });
+
+  it.only("Should vs Then", () => {
+    // Verificando tamanho da lista com promisses (then)
+    cy.get("#buttonListDOM").click();
+    //$elemento é um elemento capturado do HTML, ele começa com $ por convenção do jQuery
+    cy.get("#lista li span").then(($elemento) => {
+      // verifica-se os valores retornados com o uso do expect, que foi estudado
+      // no arquivo 'asserts.spec.js'
+
+      //Também consigo imprimir o elemento
+      console.log($elemento);
+      expect($elemento).to.have.length(1);
+    });
+
+    // Verificando tamanho da lista com should
+    cy.reload();
+    cy.get("#buttonListDOM").click();
+    cy.get("#lista li span").should("have.length", 1);
+
+    // Posso trocar o 'then' pelo 'should'
+    cy.get("#lista li span").should(($elemento) => {
+      // verifica-se os valores retornados com o uso do expect, que foi estudado
+      // no arquivo 'asserts.spec.js'
+
+      //Também consigo imprimir o elemento
+      console.log($elemento);
+      expect($elemento).to.have.length(1);
+    });
+
+    // Encadeando testes na promisse
+    cy.get("#buttonListDOM")
+      .then(($elemento) => {
+        console.log($elemento);
+        expect($elemento).to.have.length(1);
+        expect($elemento).have.value("Listar DOM");
+
+        //se usar return com then ele dá erro, se usar com o should, dá sucesso pois
+        // o should sempre retorna o objeto que recebeu, nesse caso o $elemento
+        // return 2;
+      })
+      .and("have.id", "buttonListDOM");
+
+    // Retornando outro objeto depois dos testes com o then
+    // como should não funcionaria pois ele sempre retorno o objeto de entrada
+    cy.get("#buttonListDOM")
+      .then(($elemento) => {
+        console.log($elemento);
+        expect($elemento).to.have.length(1);
+        expect($elemento).have.value("Listar DOM");
+
+        return 2;
+      })
+      .and("eq", 2)
+      .and("not.have.id", "buttonListDOM");
+
+    cy.get("#buttonListDOM").should(($elemento) => {
+      console.log($elemento);
+      expect($elemento).to.have.length(1); // Faz retentativas até ter este resultado
+
+      cy.get("#buttonListDOM"); // Entra em loop infinito pois vai fazer as retentativas dando
+      // o get no elemento de id 'buttonListDOM', não no de id 'buttonListDOM', se estivesse usando o
+      // then, ele não entraria em loop
+    });
+  });
 });
