@@ -40,7 +40,7 @@ describe("Work with basic elements",()=>{
     
     })
 
-    it.only("Text fields",()=>{
+    it("Text fields",()=>{
         // Inserindo conteúdo com 'type()'
         // mais detalhes do type: https://docs.cypress.io/api/commands/type
         cy.get('#formNome').type("Cypress Test");
@@ -60,6 +60,9 @@ describe("Work with basic elements",()=>{
         // backspace, esc, enter, rightArrow, leftArrow, upArrow, downArrow, 
         // home, end, insert, pageUp, pageDown, {, alt, option, ctrl, control, 
         // meta, command, cmd, shift.
+
+        //Pegando elemento que possui a propriedade 'data-cy' e que seu valor
+        // seja 'dataSobrenome'
         cy.get('[data-cy=dataSobrenome]')
             .type("Teste12345{backspace}{backspace}")
             .should('have.value','Teste123');
@@ -72,5 +75,65 @@ describe("Work with basic elements",()=>{
         .clear()
         .type("Erro{selectall}acerto", {delay: 100})
         .should('have.value','acerto');
+    })
+
+    it("RadioButton", ()=>{
+
+        // Clica no radio 'Feminino' e verifica que ele está checado
+        cy.get('#formSexoFem')
+            .click()
+            .should('be.checked');
+
+        // Verifica que o radio 'Masculino' NÃO está checado
+        cy.get('#formSexoMasc')
+            .should('not.be.checked');
+
+
+        // Verifica que possui 2 elementos no radio formSexo
+
+        //Pegando elemento que possui a propriedade 'name' e que seu valor
+        // seja 'formSexo'
+        cy.get("[name='formSexo']").should('have.length',2);
+    })
+
+    it("Checkbox",()=>{
+
+        cy.get('#formComidaPizza')
+            .click()
+            .should('be.checked');
+
+        // Possui 4 elementos que possui o valor 'formComidaFavorita' para
+        // a propriedade 'name', por isso passamos um objeto com a
+        // configuração 'multiple:true' como argumento para o método 'click()'
+        cy.get('[name=formComidaFavorita]')
+            .click({multiple:true});
+
+        // 'formComidaPizza' não deve estar marcado
+        cy.get('#formComidaPizza')
+            .should('not.be.checked');
+    })
+
+    
+    it("ComboBox",()=>{
+
+        // Selecionando a opção 'Superior' (do jeito que visalizados) e verificando se
+        // a opção selecionada é a 'Superior' (do jeito que fica no value do option, 
+        // ou seja 'superior')
+        cy.get('[data-test=dataEscolaridade]')
+            .select('Superior')
+            .should('have.value','superior');
+
+        // Selecionando a opção '2º Grau Completo' do jeito que fica no value do option, 
+        // ou seja 'superior')
+        cy.get('[data-test=dataEscolaridade]')
+        .select('2graucomp')
+        .should('have.value','2graucomp');
+    })
+
+    it.only("Combo múltiplo",()=>{
+
+        // Selecionando duas opções do combo múltiplo do jeito que fica no value do option.
+        cy.get('[data-testid=dataEsportes]')
+            .select(['natacao','Corrida']);
     })
 })
