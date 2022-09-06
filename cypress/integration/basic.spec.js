@@ -1,7 +1,7 @@
 /// <reference types = "cypress" />
 
 describe("Cypress basics", () => {
-  it("Should visit a page and assert title", () => {
+  it.only("Should visit a page and assert title", () => {
     const url = "https://wcaquino.me/cypress/componentes.html";
 
     // cy = Variável grobal do cypress
@@ -25,11 +25,20 @@ describe("Cypress basics", () => {
       .should("be.equal", "Campo de Treinamento")
       .and("contain", "Treinamento");
 
-    //TODO imprimir log no console
+    //imprimindo título com promisse
+    cy.title().then((titulo) => {
+      console.log(titulo);
+    });
+
+    //imprimindo título com promisse usando should() que também trata promisses
+    cy.title().should((titulo) => {
+      console.log(titulo);
+    });
+
     //TODO escrever o log em um campo de texto
   });
 
-  it("Should find and interect with an element", ()=>{
+  it("Should find and interect with an element", () => {
     const url = "https://wcaquino.me/cypress/componentes.html";
 
     // cy = Variável grobal do cypress
@@ -37,7 +46,7 @@ describe("Cypress basics", () => {
     cy.visit(url);
 
     //Pegando um elemento e verificando o seu 'value'
-    cy.get('#buttonSimple').should('have.value',"Clique Me!");
+    cy.get("#buttonSimple").should("have.value", "Clique Me!");
 
     //Pegando um elemento e clicando nele
     //cy.get('#buttonSimple').click();
@@ -46,22 +55,17 @@ describe("Cypress basics", () => {
     //verificando o seu 'value' é igual a 'Clique Me!'
     //clicando nele
     //verificando se o seu 'value' é igual a 'Obrigado!'
-    cy.get('#buttonSimple')
-      .should('have.value',"Clique Me!")
+    cy.get("#buttonSimple")
+      .should("have.value", "Clique Me!")
       .click()
-      .should('have.value',"Obrigado!");
+      .should("have.value", "Obrigado!");
 
-       //Usado para permitir a depuração no navegador a partir deste ponto
-       //Informações são impressas no console
-      cy.title()
-      .should('be.equal',"Campo de Treinamento")
-      .debug()
+    //Usado para permitir a depuração no navegador a partir deste ponto
+    //Informações são impressas no console
+    cy.title().should("be.equal", "Campo de Treinamento").debug();
 
-      cy.pause(); //Usado para permitir o acompanhamento passo-a-passo dos testes
-      cy.title()
-        .should('be.equal',"Campo de Treinamento")
-      cy.get('#buttonSimple')
-        .should('have.value',"Obrigado!")
-
-  })
+    cy.pause(); //Usado para permitir o acompanhamento passo-a-passo dos testes
+    cy.title().should("be.equal", "Campo de Treinamento");
+    cy.get("#buttonSimple").should("have.value", "Obrigado!");
+  });
 });
