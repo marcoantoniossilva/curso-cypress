@@ -128,6 +128,19 @@ describe("Work with basic elements",()=>{
         cy.get('[data-test=dataEscolaridade]')
         .select('2graucomp')
         .should('have.value','2graucomp');
+
+
+        // Verificando o tamanho do combo
+        cy.get('[data-test=dataEscolaridade] option').should('have.length',8);
+
+        // Validando que o combo possua os valores 'Superior' e 'Mestrado'
+        cy.get('[data-test=dataEscolaridade] option').then($arr=>{
+            const values = [];
+            $arr.each(function(){
+                values.push(this.innerHTML);
+            });
+            expect(values).to.include.members(["Superior","Mestrado"]);
+        })
     })
 
     it.only("Combo múltiplo",()=>{
@@ -135,5 +148,22 @@ describe("Work with basic elements",()=>{
         // Selecionando duas opções do combo múltiplo do jeito que fica no value do option.
         cy.get('[data-testid=dataEsportes]')
             .select(['natacao','Corrida']);
+
+        // Validando que o combo possua algumas opções
+
+        // Não funciona
+        //cy.get('[data-testid=dataEsportes]')
+        //    .should('have.value','natacao','Corrida', 'nada');
+
+        cy.get('[data-testid=dataEsportes]').then($elemento =>{
+            expect($elemento.val()).to.be.deep.eq(['natacao','Corrida']);
+            expect($elemento.val()).to.have.length(2);
+        });
+
+        // Validando que o combo possua algumas opções através do invoke
+        // eql = deep equal
+        cy.get('[data-testid=dataEsportes]')
+            .invoke('val')
+            .should('eql',['natacao','Corrida']);
     })
 })

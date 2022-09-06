@@ -35,7 +35,31 @@ describe("Cypress basics", () => {
       console.log(titulo);
     });
 
-    //TODO escrever o log em um campo de texto
+    // Escrevedo o titulo em um campo de texto
+    cy.title().then((titulo) => {
+      cy.get('#formNome').type(titulo);
+    });
+
+
+    // Guardando valores em variáveis
+    let tituloSincronizado;
+
+    cy.title().then((titulo) => {
+      tituloSincronizado = titulo;
+    });
+
+
+    // Não funciona dessa forma
+    //cy.get('[data-cy=dataSobrenome]').type(tituloSincronizado);
+
+    cy.get('[data-cy=dataSobrenome]').then($elemento =>{
+      $elemento.val(tituloSincronizado);
+    });
+
+
+    cy.get('#elementosForm\\:sugestoes').then($elemento =>{
+      cy.wrap($elemento).type(tituloSincronizado);
+    })
   });
 
   it("Should find and interect with an element", () => {
