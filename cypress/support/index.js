@@ -18,3 +18,20 @@ import './commands'
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
+
+// Alterando a ordem de prioridade dos locators
+// Dessa forma, o ID fica sendo a estratégia preferida
+// para localizar um elemento.
+// Pode usar também um atributo personalisável ex: data-marco
+// mais detalhes: https://docs.cypress.io/api/cypress-api/selector-playground-api#Get-Selector
+Cypress.SelectorPlayground.defaults({
+    selectorPriority: [
+        'id',
+        'class',
+        'attributes',
+        'data-cy',
+        'data-test',
+        'data-testid',
+        'tag',
+        'nth-child']
+});
