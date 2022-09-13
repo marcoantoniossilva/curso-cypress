@@ -43,4 +43,34 @@ describe("Work with basic elements",()=>{
         cy.get('table#tabelaUsuarios td:contains(\'Doutorado\'):eq(0) ~ td:eq(3) input');
 
     });
+
+    it.only('Using Xpath',()=>{
+
+        // Pegando o input cujo valor do onclick contanha o valor 'Francisco'
+        cy.xpath('//input[contains(@onclick,\'Francisco\')]');
+
+        // Pegando o input de texto lateral ao anterior
+        // table[@id=\'tabelaUsuarios\'] = Tabela cujo id = 'tabelaUsuarios'
+        // //td[contains(.,\'Francisco\') = td que contenha 'Francisco' em qualquer lugar
+        // /../ = subiu um nível de onde estava
+        // input[@type=\'text\'] = input cujo tipo seta de texto
+        cy.xpath("//table[@id='tabelaUsuarios']//td[contains(.,'Francisco')]/..//input[@type='text']");
+    
+        // Pegando o radio lateral à segunda vez que aparecer 'Doutorado em um td'
+        // Foi adicionado () para 'agrupar' os resultados até aí para que fosse possível
+        // recuperar o segundo registro com o comando [2]
+        cy.xpath("(//table[@id='tabelaUsuarios']//td[contains(.,'Doutorado')])[2]/..//input[@type='radio']");
+        
+        // Qualquer elemento cuja propriedade data-test seja igual à 'data2'
+        cy.xpath('//*[@data-test=\'data2\']');
+
+        // Recuperando e digtando em campo de texto que contenha em sua linha
+        // uma celula com valor 'Usuario A' e outra com valor 'Mestrado'
+
+        // /following-sibling::td = pega o irmão - que seja td e contenha 'Mestrado'
+        // em algum lugar - do ojbeto encontrado até esse ponto.
+        cy.xpath("//td[contains(.,'Usuario A')]/following-sibling::td[contains(.,'Mestrado')]/..//input[@type='text']")
+            .type('Encontrou');
+
+    });
 });

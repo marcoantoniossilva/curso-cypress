@@ -19,6 +19,8 @@ import './commands'
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
 
+require('cypress-xpath')
+
 // Alterando a ordem de prioridade dos locators
 // Dessa forma, o ID fica sendo a estratégia preferida
 // para localizar um elemento.
