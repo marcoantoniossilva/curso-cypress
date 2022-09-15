@@ -23,3 +23,10 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
+
+Cypress.Commands.add('MeuComandoPersonalizado',(localizador,mensagem)=>{
+    cy.get(localizador).click();
+    cy.on('window:alert', mensagemAlert =>{
+        expect(mensagemAlert).to.be.eq(mensagem);
+    })
+});
