@@ -29,6 +29,27 @@ describe("Clock tests",()=>{
     it("Goes to the future",()=>{
         cy.get('#buttonTimePassed').click();
 
-        cy.get('#resultado > span');
+        cy.get('#resultado > span').should('contain','166');
+
+        // Verifica se o valor em ms é maior que 1663370626359
+        // O invoke('text') recupera o texto do #resultado > span
+        // O .should('gt', 1663370626359) verifica se ele é maior que 1663370626359
+        // gt = greater than
+        cy.get('#resultado > span').invoke('text').should('gt', 1663370626359);
+
+
+        // Resetando o tempo
+        cy.clock();
+        cy.get('#buttonTimePassed').click();
+        // Verifica se o valor em ms é menor ou = a zero
+        // lte = less than equal
+        cy.get('#resultado > span').invoke('text').should('lte', 0);
+
+        // Avançando o tempo em 5000 ms
+        cy.tick(5000);
+        cy.get('#buttonTimePassed').click();
+        // Verifica se o valor em ms é maior ou = a 5000
+        // gte = greater than equal
+        cy.get('#resultado > span').invoke('text').should('gte', 5000);
     })
 });
