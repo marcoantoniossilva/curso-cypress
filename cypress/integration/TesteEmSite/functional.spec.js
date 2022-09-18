@@ -29,7 +29,32 @@ describe("Should test at a functional level",()=>{
         });
 
         cy.get('.btn').click();
-        cy.get('.toast-success > .toast-message').should('contain','sucesso');
+        cy.get('.toast-success > .toast-message').should('contain','Conta criada com sucesso');
         
+    });
+
+    it("Should update an account",()=>{
+
+        cy.get('[data-test=menu-settings]').click();
+        cy.get('[href="/contas"]').click();
+
+        // Carrega as informações do arquivo 'barrigaDataSite'
+        cy.fixture("barrigaDataSite").as("dados").then(function (){
+
+            // Recuperando o botão editar da conta criada e clicando
+            cy.xpath(`//table//td[contains(.,'${this.dados.conta.nomeConta}')]/..//i[@class='far fa-edit']`)
+                .click();
+            // Limpando o campo e digitando o nome da conta + 2
+            cy.get('.form-control').type(`{selectAll}${this.dados.conta.nomeConta} 2`);
+            
+            // Poderia limpar o campo com clear também
+            cy.get('.form-control')
+            .clear()
+            .type(`${this.dados.conta.nomeConta} 2`);
+
+            cy.get('.btn').click();
+            cy.get('.toast-success > .toast-message').should('contain','Conta atualizada com sucesso');
+        });
+
     });
 });
