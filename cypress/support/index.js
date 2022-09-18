@@ -28,12 +28,12 @@ require('cypress-xpath')
 // mais detalhes: https://docs.cypress.io/api/cypress-api/selector-playground-api#Get-Selector
 Cypress.SelectorPlayground.defaults({
     selectorPriority: [
-        'id',
-        'class',
-        'attributes',
         'data-cy',
         'data-test',
         'data-testid',
+        'id',
+        'class',
+        'attributes',
         'tag',
         'nth-child']
 });

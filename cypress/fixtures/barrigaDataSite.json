@@ -1,4 +1,9 @@
 {
-    "email": "mm@mm",
-    "senha": "1234"
+    "login": {
+        "email": "mm@mm",
+        "senha": "1234"
+    },
+    "conta": {
+        "nomeConta": "Poupança"
+    }
 }
