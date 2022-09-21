@@ -1,5 +1,7 @@
 /// <reference types = "cypress" />
 
+import loc from "../../support/locators";
+
 describe("Should test at a functional level",()=>{
     // Todos os testes que estão dentro deste grupo irão aproveitar
     // o código do hook abaixo que será executado antes de todos os testes
@@ -9,34 +11,34 @@ describe("Should test at a functional level",()=>{
 
         // Carrega as informações do arquivo 'barrigaDataSite'
         cy.fixture("barrigaDataSite").as("dados").then(function (){
-            cy.get('.input-group > .form-control').type(this.dados.login.email);
-            cy.get(':nth-child(2) > .form-control').type(this.dados.login.senha);
+            cy.get(loc.LOGIN.USER).type(this.dados.login.email);
+            cy.get(loc.LOGIN.PASSWORD).type(this.dados.login.senha);
 
-            cy.get('.btn').click();
+            cy.get(loc.LOGIN.BTN_LOGIN).click();
 
-            cy.get('.toast').should('contain','Bem vindo');
+            cy.get(loc.MESSAGE).should('contain','Bem vindo');
         });
     });
 
     it("Should create an account",()=>{
 
-        cy.get('[data-test=menu-settings]').click();
-        cy.get('[href="/contas"]').click();
+        cy.get(loc.MENU.SETTINGS).click();
+        cy.get(loc.MENU.ACCOUNTS).click();
 
         // Carrega as informações do arquivo 'barrigaDataSite'
         cy.fixture("barrigaDataSite").as("dados").then(function (){
-            cy.get('.form-control').type(this.dados.conta.nomeConta);
+            cy.get(loc.ACCOUNTS.NAME).type(this.dados.conta.nomeConta);
         });
 
-        cy.get('.btn').click();
-        cy.get('.toast-success > .toast-message').should('contain','Conta criada com sucesso');
+        cy.get(loc.ACCOUNTS.BTN_SAVE).click();
+        cy.get(loc.MESSAGE).should('contain','Conta inserida com sucesso');
         
     });
 
     it("Should update an account",()=>{
 
-        cy.get('[data-test=menu-settings]').click();
-        cy.get('[href="/contas"]').click();
+        cy.get(loc.MENU.SETTINGS).click();
+        cy.get(loc.MENU.ACCOUNTS).click();
 
         // Carrega as informações do arquivo 'barrigaDataSite'
         cy.fixture("barrigaDataSite").as("dados").then(function (){
@@ -45,15 +47,15 @@ describe("Should test at a functional level",()=>{
             cy.xpath(`//table//td[contains(.,'${this.dados.conta.nomeConta}')]/..//i[@class='far fa-edit']`)
                 .click();
             // Limpando o campo e digitando o nome da conta + 2
-            cy.get('.form-control').type(`{selectAll}${this.dados.conta.nomeConta} 2`);
+            cy.get(loc.ACCOUNTS.NAME).type(`{selectAll}${this.dados.conta.nomeConta} 2`);
             
             // Poderia limpar o campo com clear também
-            cy.get('.form-control')
+            cy.get(loc.ACCOUNTS.NAME)
             .clear()
             .type(`${this.dados.conta.nomeConta} 2`);
 
-            cy.get('.btn').click();
-            cy.get('.toast-success > .toast-message').should('contain','Conta atualizada com sucesso');
+            cy.get(loc.ACCOUNTS.BTN_SAVE).click();
+            cy.get(loc.MESSAGE).should('contain','Conta atualizada com sucesso');
         });
 
     });
