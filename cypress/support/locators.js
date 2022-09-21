@@ -6,7 +6,8 @@ const locators = {
     },
     MENU: {
         SETTINGS: '[data-test=menu-settings]',
-        ACCOUNTS: '[href="/contas"]'
+        ACCOUNTS: '[href="/contas"]',
+        RESET: '[href="/reset"]'
     },
     ACCOUNTS:{
         NAME: '[data-test=nome]',

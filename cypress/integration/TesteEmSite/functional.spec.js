@@ -11,13 +11,12 @@ describe("Should test at a functional level",()=>{
 
         // Carrega as informações do arquivo 'barrigaDataSite'
         cy.fixture("barrigaDataSite").as("dados").then(function (){
-            cy.get(loc.LOGIN.USER).type(this.dados.login.email);
-            cy.get(loc.LOGIN.PASSWORD).type(this.dados.login.senha);
-
-            cy.get(loc.LOGIN.BTN_LOGIN).click();
-
-            cy.get(loc.MESSAGE).should('contain','Bem vindo');
+            // Chama o comando personaizado para fazer login
+            cy.login(this.dados.login.email,this.dados.login.senha);
         });
+
+        // Chama o comando personaizado para resetar os dados do banco
+        cy.resetApp();
     });
 
     it("Should create an account",()=>{
