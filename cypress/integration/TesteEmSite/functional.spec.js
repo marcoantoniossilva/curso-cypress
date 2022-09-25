@@ -1,6 +1,7 @@
 /// <reference types = "cypress" />
 
 import loc from "../../support/locators";
+import "../../support/commandsContas";
 
 describe("Should test at a functional level",()=>{
     // Todos os testes que estão dentro deste grupo irão aproveitar
@@ -21,23 +22,19 @@ describe("Should test at a functional level",()=>{
 
     it("Should create an account",()=>{
 
-        cy.get(loc.MENU.SETTINGS).click();
-        cy.get(loc.MENU.ACCOUNTS).click();
+        cy.acessarMenuConta();
 
-        // Carrega as informações do arquivo 'barrigaDataSite'
         cy.fixture("barrigaDataSite").as("dados").then(function (){
-            cy.get(loc.ACCOUNTS.NAME).type(this.dados.conta.nomeConta);
+            cy.inserirConta(this.dados.conta.nomeConta);
         });
 
-        cy.get(loc.ACCOUNTS.BTN_SAVE).click();
         cy.get(loc.MESSAGE).should('contain','Conta inserida com sucesso');
         
     });
 
     it("Should update an account",()=>{
 
-        cy.get(loc.MENU.SETTINGS).click();
-        cy.get(loc.MENU.ACCOUNTS).click();
+        cy.acessarMenuConta();
 
         // Carrega as informações do arquivo 'barrigaDataSite'
         cy.fixture("barrigaDataSite").as("dados").then(function (){
@@ -56,6 +53,32 @@ describe("Should test at a functional level",()=>{
             cy.get(loc.ACCOUNTS.BTN_SAVE).click();
             cy.get(loc.MESSAGE).should('contain','Conta atualizada com sucesso');
         });
+
+    });
+
+    it("Should not create an account with same name.",()=>{
+
+        cy.acessarMenuConta();
+
+        // Carrega as informações do arquivo 'barrigaDataSite'
+        cy.fixture("barrigaDataSite").as("dados").then(function (){
+            cy.inserirConta(`${this.dados.conta.nomeConta} 2`);
+        });
+
+        cy.get(loc.MESSAGE).should('contain','code 400');
+
+    });
+
+    it("Should create a transaction",()=>{
+
+        cy.acessarMenuMovimentacao();
+
+        // Carrega as informações do arquivo 'barrigaDataSite'
+        cy.fixture("barrigaDataSite").as("dados").then(function (){
+            cy.inserirConta(`${this.dados.conta.nomeConta} 2`);
+        });
+
+        cy.get(loc.MESSAGE).should('contain','code 400');
 
     });
 });
