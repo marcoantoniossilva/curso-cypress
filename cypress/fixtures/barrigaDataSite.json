@@ -4,12 +4,22 @@
         "senha": "1234"
     },
     "conta": {
-        "nomeConta": "Poupança"
+        "nomeNovaConta": "Conta Nova",
+        "nomeConta": "Conta para alterar",
+        "novoNomeConta": "Conta alterada",
+        "nomeContaRepetida": "Conta mesmo nome"
     },
     "movimentacao": {
         "descricao": "Poupança",
         "valor": 123,
         "interessado": "Manolo da Silva",
-        "conta": "Conta para alterar"
+        "conta": "Conta para movimentacoes",
+        "nomeMovimentacaoExclucao": "Movimentacao para exclusao",
+        "movParaAlterarSaldo": "Movimentacao 1, calculo saldo"
+    },
+    "saldo": {
+        "contaParaSaldo": "Conta para saldo",
+        "valor": 534,
+        "novoValor": 4.034
     }
 }

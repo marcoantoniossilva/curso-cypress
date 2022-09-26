@@ -15,17 +15,22 @@ describe("Should test at a functional level",()=>{
             // Chama o comando personaizado para fazer login
             cy.login(this.dados.login.email,this.dados.login.senha);
         });
+    });
+
+    beforeEach(()=>{
+        cy.get(loc.MENU.HOME).click();
 
         // Chama o comando personaizado para resetar os dados do banco
         cy.resetApp();
     });
+
 
     it("Should create an account",()=>{
 
         cy.acessarMenuConta();
 
         cy.fixture("barrigaDataSite").as("dados").then(function (){
-            cy.inserirConta(this.dados.conta.nomeConta);
+            cy.inserirConta(this.dados.conta.nomeNovaConta);
         });
 
         cy.get(loc.MESSAGE).should('contain','Conta inserida com sucesso');
@@ -43,12 +48,12 @@ describe("Should test at a functional level",()=>{
             cy.xpath(`//table//td[contains(.,'${this.dados.conta.nomeConta}')]/..//i[@class='far fa-edit']`)
                 .click();
             // Limpando o campo e digitando o nome da conta + 2
-            cy.get(loc.ACCOUNTS.NAME).type(`{selectAll}${this.dados.conta.nomeConta} 2`);
+            cy.get(loc.ACCOUNTS.NAME).type(`{selectAll}${this.dados.conta.novoNomeConta}`);
             
             // Poderia limpar o campo com clear também
             cy.get(loc.ACCOUNTS.NAME)
             .clear()
-            .type(`${this.dados.conta.nomeConta} 2`);
+            .type(`${this.dados.conta.novoNomeConta}`);
 
             cy.get(loc.ACCOUNTS.BTN_SAVE).click();
             cy.get(loc.MESSAGE).should('contain','Conta atualizada com sucesso');
@@ -62,7 +67,7 @@ describe("Should test at a functional level",()=>{
 
         // Carrega as informações do arquivo 'barrigaDataSite'
         cy.fixture("barrigaDataSite").as("dados").then(function (){
-            cy.inserirConta(`${this.dados.conta.nomeConta} 2`);
+            cy.inserirConta(`${this.dados.conta.nomeContaRepetida}`);
         });
 
         cy.get(loc.MESSAGE).should('contain','code 400');
@@ -108,12 +113,24 @@ describe("Should test at a functional level",()=>{
 
         // Carrega as informações do arquivo 'barrigaDataSite'
         cy.fixture("barrigaDataSite").as("dados").then(function (){
-            let conta = this.dados.movimentacao.conta;
-            let vl = this.dados.movimentacao.valor;
+            let conta = this.dados.saldo.contaParaSaldo;
+            let vl = this.dados.saldo.valor;
+            let mvAltSaldo = this.dados.movimentacao.movParaAlterarSaldo;
+            let novoValor = this.dados.saldo.novoValor;
             // chama o locator com parametro dinamico
             cy.xpath(loc.BALANCE.FN_XP_ACCOUNT_VALUE_FIND(conta,vl)).should('exist');
-        });
 
+
+            // Editando um movimento para alterar o saldo
+            cy.get(loc.MENU.EXTRACT).click();
+            cy.xpath(loc.EXTRACT.FN_XP_EDIT_ELEMENT(mvAltSaldo)).click();
+            cy.get(loc.TRANSACTION.DESCRIPTION).should('have.value',mvAltSaldo);
+            cy.get(loc.TRANSACTION.STATUS).click();
+            cy.get(loc.TRANSACTION.BTN_SAVE).click();
+            cy.get(loc.MESSAGE).should('contain','Movimentação alterada com sucesso!');
+            cy.get(loc.MENU.HOME).click();
+            cy.xpath(loc.BALANCE.FN_XP_ACCOUNT_VALUE_FIND(conta,novoValor)).should('exist');
+        });
     });
 
     // Poderia criar comando como os anteriores, mas como era curto, não criei
@@ -123,7 +140,7 @@ describe("Should test at a functional level",()=>{
 
         // Carrega as informações do arquivo 'barrigaDataSite'
         cy.fixture("barrigaDataSite").as("dados").then(function (){
-            let descricao = this.dados.movimentacao.descricao;
+            let descricao = this.dados.movimentacao.nomeMovimentacaoExclucao;
             cy.xpath(loc.EXTRACT.FN_XP_REMOVE_ELEMENT(descricao)).click();
         });
 
