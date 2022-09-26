@@ -1,3 +1,4 @@
+
 const locators = {
     LOGIN: {
         USER: "[data-test=email]",
@@ -5,6 +6,7 @@ const locators = {
         BTN_LOGIN: ".btn"
     },
     MENU: {
+        HOME: '[data-test=menu-home]',
         SETTINGS: '[data-test=menu-settings]',
         ACCOUNTS: '[href="/contas"]',
         RESET: '[href="/reset"]',
@@ -18,11 +20,16 @@ const locators = {
         DESCRIPTION: '[data-test=descricao]',
         VALUE: '[data-test=valor]',
         INTERESTED: '[data-test=envolvido]',
+        STATUS:'[data-test=status]',
+        ACCOUNT: '[data-test=conta]',
         BTN_SAVE: '.btn-primary'
     },
     EXTRACT:{
         REGISTERS: '.list-group > li',
-        XP_VALUE_FIND: '//span[contains(.,VALUE_FIND)]'
+        XP_DESCRIPTION_VALUE_FIND: '//span[contains(.,DESCRIPTION)]/following-sibling::small[contains(.,VALUE)]'
+    },
+    BALANCE:{
+        FN_XP_ACCOUNT_VALUE_FIND: (conta, valor) => `//td[contains(.,'${conta}')]/following-sibling::td[contains(.,'${valor}')]`
     },
     MESSAGE: ".toast"
 

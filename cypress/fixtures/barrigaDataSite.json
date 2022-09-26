@@ -8,7 +8,8 @@
     },
     "movimentacao": {
         "descricao": "Poupança",
-        "valor": 123.45,
-        "interessado": "Manolo da Silva"
+        "valor": 123,
+        "interessado": "Manolo da Silva",
+        "conta": "Conta para alterar"
     }
 }

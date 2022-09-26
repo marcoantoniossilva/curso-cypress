@@ -77,10 +77,11 @@ describe("Should test at a functional level",()=>{
         cy.fixture("barrigaDataSite").as("dados").then(function (){
             let desc = this.dados.movimentacao.descricao;
             let vl = this.dados.movimentacao.valor;
+            let conta = this.dados.movimentacao.conta;
             cy.inserirMovimentacao(
                 desc,
                 vl,
-                this.dados.movimentacao.interessado);
+                this.dados.movimentacao.interessado,conta);
 
             // Validações
             // Validando mensagem de sucesso
@@ -90,8 +91,26 @@ describe("Should test at a functional level",()=>{
 
             // Validando que a movimentação consta na lista com xpath
             // Pra isso, valida que um span contenha a descricao da movimentação
-            cy.xpath(loc.EXTRACT.XP_VALUE_FIND.replace('VALUE_FIND',`${desc}`)).should('exist');
+            // e o irmão que contenha o valor
+            cy.xpath(
+                loc.EXTRACT.XP_DESCRIPTION_VALUE_FIND
+                    .replace('DESCRIPTION',`${desc}`)
+                    .replace('VALUE',`${vl}`)
+                ).should('exist');
 
         });
+    });
+
+    it("Should get balance.",()=>{
+
+        cy.get(loc.MENU.HOME).click();
+
+        // Carrega as informações do arquivo 'barrigaDataSite'
+        cy.fixture("barrigaDataSite").as("dados").then(function (){
+            let conta = this.dados.movimentacao.conta;
+            let vl = this.dados.movimentacao.valor;
+            cy.xpath(loc.BALANCE.FN_XP_ACCOUNT_VALUE_FIND(conta,vl)).should('exist');
+        });
+
     });
 });
