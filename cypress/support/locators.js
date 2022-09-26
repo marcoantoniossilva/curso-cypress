@@ -7,10 +7,11 @@ const locators = {
     },
     MENU: {
         HOME: '[data-test=menu-home]',
+        EXTRACT: '[data-test=menu-extrato]',
         SETTINGS: '[data-test=menu-settings]',
         ACCOUNTS: '[href="/contas"]',
         RESET: '[href="/reset"]',
-        TRANSACTION: '[data-test=menu-movimentacao] > .fas'
+        TRANSACTION: '[data-test=menu-movimentacao]'
     },
     ACCOUNTS:{
         NAME: '[data-test=nome]',
@@ -26,10 +27,11 @@ const locators = {
     },
     EXTRACT:{
         REGISTERS: '.list-group > li',
-        XP_DESCRIPTION_VALUE_FIND: '//span[contains(.,DESCRIPTION)]/following-sibling::small[contains(.,VALUE)]'
+        XP_DESCRIPTION_VALUE_FIND: '//span[contains(.,DESCRIPTION)]/following-sibling::small[contains(.,VALUE)]',
+        FN_XP_REMOVE_ELEMENT: (description) => `//span[contains(.,'${description}')]/../../..//i[@class='far fa-trash-alt']`
     },
     BALANCE:{
-        FN_XP_ACCOUNT_VALUE_FIND: (conta, valor) => `//td[contains(.,'${conta}')]/following-sibling::td[contains(.,'${valor}')]`
+        FN_XP_ACCOUNT_VALUE_FIND: (account, value) => `//td[contains(.,'${account}')]/following-sibling::td[contains(.,'${value}')]`
     },
     MESSAGE: ".toast"
 

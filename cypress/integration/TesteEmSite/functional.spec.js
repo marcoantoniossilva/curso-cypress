@@ -85,7 +85,7 @@ describe("Should test at a functional level",()=>{
 
             // Validações
             // Validando mensagem de sucesso
-            cy.get(loc.MESSAGE).should('contain','sucesso');
+            cy.get(loc.MESSAGE).should('contain','Movimentação inserida com sucesso!');
             // Validando que a lista de movimentações agora contém 7 registros
             cy.get(loc.EXTRACT.REGISTERS).should('have.length',7);
 
@@ -101,6 +101,7 @@ describe("Should test at a functional level",()=>{
         });
     });
 
+    // Poderia criar comando como os anteriores, mas como era curto, não criei
     it("Should get balance.",()=>{
 
         cy.get(loc.MENU.HOME).click();
@@ -109,8 +110,25 @@ describe("Should test at a functional level",()=>{
         cy.fixture("barrigaDataSite").as("dados").then(function (){
             let conta = this.dados.movimentacao.conta;
             let vl = this.dados.movimentacao.valor;
+            // chama o locator com parametro dinamico
             cy.xpath(loc.BALANCE.FN_XP_ACCOUNT_VALUE_FIND(conta,vl)).should('exist');
         });
+
+    });
+
+    // Poderia criar comando como os anteriores, mas como era curto, não criei
+    it("Should remove a transaction.",()=>{
+
+        cy.get(loc.MENU.EXTRACT).click();
+
+        // Carrega as informações do arquivo 'barrigaDataSite'
+        cy.fixture("barrigaDataSite").as("dados").then(function (){
+            let descricao = this.dados.movimentacao.descricao;
+            cy.xpath(loc.EXTRACT.FN_XP_REMOVE_ELEMENT(descricao)).click();
+        });
+
+        // Validando mensagem de sucesso
+        cy.get(loc.MESSAGE).should('contain','Movimentação removida com sucesso!');
 
     });
 });
