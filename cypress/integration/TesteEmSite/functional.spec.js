@@ -75,10 +75,23 @@ describe("Should test at a functional level",()=>{
 
         // Carrega as informações do arquivo 'barrigaDataSite'
         cy.fixture("barrigaDataSite").as("dados").then(function (){
-            cy.inserirConta(`${this.dados.conta.nomeConta} 2`);
+            let desc = this.dados.movimentacao.descricao;
+            let vl = this.dados.movimentacao.valor;
+            cy.inserirMovimentacao(
+                desc,
+                vl,
+                this.dados.movimentacao.interessado);
+
+            // Validações
+            // Validando mensagem de sucesso
+            cy.get(loc.MESSAGE).should('contain','sucesso');
+            // Validando que a lista de movimentações agora contém 7 registros
+            cy.get(loc.EXTRACT.REGISTERS).should('have.length',7);
+
+            // Validando que a movimentação consta na lista com xpath
+            // Pra isso, valida que um span contenha a descricao da movimentação
+            cy.xpath(loc.EXTRACT.XP_VALUE_FIND.replace('VALUE_FIND',`${desc}`)).should('exist');
+
         });
-
-        cy.get(loc.MESSAGE).should('contain','code 400');
-
     });
 });

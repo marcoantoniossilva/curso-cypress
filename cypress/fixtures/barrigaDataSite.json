@@ -5,5 +5,10 @@
     },
     "conta": {
         "nomeConta": "Poupança"
+    },
+    "movimentacao": {
+        "descricao": "Poupança",
+        "valor": 123.45,
+        "interessado": "Manolo da Silva"
     }
 }

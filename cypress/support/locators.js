@@ -15,12 +15,15 @@ const locators = {
         BTN_SAVE: ".btn"
     },
     TRANSACTION:{
-        DESCRIPTION: '[data-test=menu-movimentacao] > .fas',
+        DESCRIPTION: '[data-test=descricao]',
         VALUE: '[data-test=valor]',
         INTERESTED: '[data-test=envolvido]',
         BTN_SAVE: '.btn-primary'
     },
-
+    EXTRACT:{
+        REGISTERS: '.list-group > li',
+        XP_VALUE_FIND: '//span[contains(.,VALUE_FIND)]'
+    },
     MESSAGE: ".toast"
 
 }
