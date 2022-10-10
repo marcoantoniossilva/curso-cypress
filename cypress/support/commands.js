@@ -26,49 +26,64 @@
 
 import loc from "../support/locators";
 
-Cypress.Commands.add('MeuComandoPersonalizado',(localizador,mensagem)=>{
+Cypress.Commands.add('MeuComandoPersonalizado', (localizador, mensagem) => {
     cy.get(localizador).click();
-    cy.on('window:alert', mensagemAlert =>{
+    cy.on('window:alert', mensagemAlert => {
         expect(mensagemAlert).to.be.eq(mensagem);
     })
 });
 
-Cypress.Commands.add('login',(user,pass)=>{
+Cypress.Commands.add('login', (user, pass) => {
     cy.get(loc.LOGIN.USER).type(user);
     cy.get(loc.LOGIN.PASSWORD).type(pass);
 
     cy.get(loc.LOGIN.BTN_LOGIN).click();
 
-    cy.get(loc.MESSAGE).should('contain','Bem vindo');
+    cy.get(loc.MESSAGE).should('contain', 'Bem vindo');
 });
 
-Cypress.Commands.add('resetApp',() =>{
+Cypress.Commands.add('resetApp', () => {
     cy.get(loc.MENU.SETTINGS).click();
     cy.get(loc.MENU.RESET).click();
 });
 
-Cypress.Commands.add('comandoGetToken',(user_email,user_pass)=>{
+Cypress.Commands.add('comandoGetToken', (user_email, user_pass) => {
     cy.request({
         method: "POST",
         url: "/signin",
-        body:{
-            email:user_email,
-            senha:user_pass,
+        body: {
+            email: user_email,
+            senha: user_pass,
             redirecionar: false
         }
     }).its('body.token')
         .should('not.be.empty')
-        .then(token=>{
+        .then(token => {
             return token;
         });
 });
 
-Cypress.Commands.add('comandoResetApp',(token)=>{
+Cypress.Commands.add('comandoResetApp', (token) => {
     cy.request({
         method: "GET",
         url: "/reset",
         headers: {
             Authorization: `JWT ${token}`
         }
-    }).its('status').should('be.equal',200);  
+    }).its('status').should('be.equal', 200);
+});
+
+Cypress.Commands.add('getContaByName', (token, name) => {
+    cy.request({
+        method: "GET",
+        url: "/contas/",
+        headers: {
+            Authorization: `JWT ${token}`
+        },
+        qs: {
+            nome: name
+        }
+    }).then((resp) => {
+        return resp.body[0].id;
+    });
 });
