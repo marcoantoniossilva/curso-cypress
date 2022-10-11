@@ -36,7 +36,7 @@ describe("Should test at a functional level", () => {
     });
 
     it("Should update an account", () => {
-        cy.getContaByName(token, "Conta para alterar")
+        cy.getContaIdByName(token, "Conta para alterar")
             .then(contaId => {
                 cy.request({
                     headers: {
@@ -76,7 +76,7 @@ describe("Should test at a functional level", () => {
     });
 
     it("Should create a transaction", () => {
-        cy.getContaByName(token, "Conta para movimentacoes")
+        cy.getContaIdByName(token, "Conta para movimentacoes")
             .then((contaId) => {
                 cy.request({
                     headers: {
@@ -102,11 +102,68 @@ describe("Should test at a functional level", () => {
     });
 
     it("Should get balance.", () => {
+        cy.request({
+            headers: {
+                Authorization: `JWT ${token}`
+            },
+            method: "GET",
+            url: "/saldo"
+        }).then(res => {
+            let saldoConta = null;
+            res.body.forEach(conta => {
+                if (conta.conta === 'Conta para saldo') {
+                    saldoConta = conta.saldo;
+                }
+            });
+            expect(saldoConta).to.be.equal('534.00');
+        });
 
+        cy.getTransacaoByDescricao(token, 'Movimentacao 1, calculo saldo').then(transacao => {
+            cy.request({
+                headers: {
+                    Authorization: `JWT ${token}`
+                },
+                method: "PUT",
+                url: `/transacoes/${transacao.id}`,
+                body: {
+                    status: true,
+                    conta_id: transacao.conta_id,
+                    data_pagamento: Cypress.moment(transacao.data_pagamento).format('DD/MM/YYYY'),
+                    data_transacao: Cypress.moment(transacao.data_transacao).format('DD/MM/YYYY'),
+                    descricao: transacao.descricao,
+                    envolvido: transacao.envolvido,
+                    valor: transacao.valor
+                }
+            }).its('status').should('be.equal', 200);
+        });
+
+        cy.request({
+            headers: {
+                Authorization: `JWT ${token}`
+            },
+            method: "GET",
+            url: "/saldo"
+        }).then(res => {
+            let saldoConta = null;
+            res.body.forEach(conta => {
+                if (conta.conta === 'Conta para saldo') {
+                    saldoConta = conta.saldo;
+                }
+            });
+            expect(saldoConta).to.be.equal('4034.00');
+        });
     });
 
     it("Should remove a transaction.", () => {
-
-
+        cy.getTransacaoByDescricao(token, 'Movimentacao para exclusao').then(transacao => {
+            cy.request({
+                headers: {
+                    Authorization: `JWT ${token}`
+                },
+                method: "DELETE",
+                url: `/transacoes/${transacao.id}`,
+            }).its('status').should('be.equal', 204);
+        });
     });
+
 });

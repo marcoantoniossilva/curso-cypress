@@ -73,7 +73,7 @@ Cypress.Commands.add('comandoResetApp', (token) => {
     }).its('status').should('be.equal', 200);
 });
 
-Cypress.Commands.add('getContaByName', (token, name) => {
+Cypress.Commands.add('getContaIdByName', (token, name) => {
     cy.request({
         method: "GET",
         url: "/contas/",
@@ -85,5 +85,20 @@ Cypress.Commands.add('getContaByName', (token, name) => {
         }
     }).then((resp) => {
         return resp.body[0].id;
+    });
+});
+
+Cypress.Commands.add('getTransacaoByDescricao', (token, desc) => {
+    cy.request({
+        method: "GET",
+        url: "/transacoes/",
+        headers: {
+            Authorization: `JWT ${token}`
+        },
+        qs: {
+            descricao: desc
+        }
+    }).then((resp) => {
+        return resp.body[0];
     });
 });
