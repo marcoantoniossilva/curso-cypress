@@ -120,9 +120,12 @@ describe("Should test at a functional level", () => {
 
         cy.getTransacaoByDescricao(token, 'Movimentacao 1, calculo saldo').then(transacao => {
             cy.request({
-                headers: {
-                    Authorization: `JWT ${token}`
-                },
+                // Se não enviar o token no cabeçalho da requisição, ele consegue preencher por
+                // conta do método sobrescrito 'request' em ../support/commands.js
+
+                // headers: {
+                //     Authorization: `JWT ${token}`
+                // },
                 method: "PUT",
                 url: `/transacoes/${transacao.id}`,
                 body: {

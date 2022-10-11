@@ -59,6 +59,8 @@ Cypress.Commands.add('comandoGetToken', (user_email, user_pass) => {
     }).its('body.token')
         .should('not.be.empty')
         .then(token => {
+            // declarando e preenchendo uma variável de ambiente
+            Cypress.env('token', token);
             return token;
         });
 });
@@ -89,6 +91,34 @@ Cypress.Commands.add('getContaIdByName', (token, name) => {
 });
 
 Cypress.Commands.add('getTransacaoByDescricao', (token, desc) => {
+    cy.request({
+        method: "GET",
+        url: "/transacoes/",
+        headers: {
+            Authorization: `JWT ${token}`
+        },
+        qs: {
+            descricao: desc
+        }
+    }).then((resp) => {
+        return resp.body[0];
+    });
+});
+
+//Sobrescrevendo o método request
+Cypress.Commands.overwrite('request', (originalFn, ...options) => {
+    if (options.length === 1) {
+        // se existe a variável de ambiente token
+        if (Cypress.env('token')) {
+            // Vai pegar o objeto e adicionar uma propriedade
+            options[0].headers = {
+                Authorization: `JWT ${Cypress.env('token')}`
+            }
+        }
+
+        return originalFn(...options);
+    }
+
     cy.request({
         method: "GET",
         url: "/transacoes/",
