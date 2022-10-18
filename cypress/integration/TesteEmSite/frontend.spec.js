@@ -409,5 +409,27 @@ describe("Should test at a functional level", () => {
         cy.xpath(loc.EXTRACT.FN_XP_LINE('Despesa pendente')).should('have.class', 'despesaPendente');
 
         cy.xpath(loc.EXTRACT.FN_XP_LINE('Despesa pendente')).should('not.have.class', 'receitaPendente');
-    })
+    });
+
+    it.only('Should test the responsiveness', () => {
+        cy.get('[data-test=menu-home]').should('exist')
+            .and('be.visible');
+
+        // Redimensionando tela
+        cy.viewport(500, 700);
+
+        cy.get('[data-test=menu-home]').should('exist')
+            .and('not.be.visible');
+
+        // Redimensionando tela usando presets (https://docs.cypress.io/api/commands/viewport#Arguments)
+        cy.viewport('samsung-s10');
+
+        cy.get('[data-test=menu-home]').should('exist')
+            .and('not.be.visible');
+
+        cy.viewport('ipad-2');
+
+        cy.get('[data-test=menu-home]').should('exist')
+            .and('be.visible');
+    });
 });
