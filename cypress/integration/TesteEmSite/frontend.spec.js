@@ -151,7 +151,7 @@ describe("Should test at a functional level", () => {
                     { conta: "Conta para alterar", id: 1351706, descricao: "Movimentacao 12, calculo saldo", envolvido: "CCC", observacao: null, tipo: "REC", data_transacao: "2022-10-17T03:00:00.000Z", data_pagamento: "2022-10-17T03:00:00.000Z", valor: "125.00", status: false, conta_id: 1438657, usuario_id: 33074, transferencia_id: null, parcelamento_id: null },
                     { conta: contaFalsa, id: 1351706, descricao: desc, envolvido: this.dados.movimentacao.interessado, observacao: null, tipo: "REC", data_transacao: "2022-10-17T03:00:00.000Z", data_pagamento: "2022-10-17T03:00:00.000Z", valor: vl, status: false, conta_id: 1438657, usuario_id: 33074, transferencia_id: null, parcelamento_id: null }
                 ]
-            })
+            });
 
             cy.route({
                 method: "POST",
@@ -391,4 +391,23 @@ describe("Should test at a functional level", () => {
         cy.get(loc.MESSAGE).should('contain', 'Conta inserida com sucesso');
 
     });
+
+    it.only('Should test colors', () => {
+        cy.route({
+            method: "GET",
+            url: "/extrato/**",
+            response: [
+                { conta: "Conta com movimentacao", id: 1343473, descricao: "Receita paga", envolvido: "BBB", observacao: null, tipo: "REC", data_transacao: "2022-10-12T03:00:00.000Z", data_pagamento: "2022-10-12T03:00:00.000Z", valor: "-1500.00", status: true, conta_id: 1438660, usuario_id: 33074, transferencia_id: null, parcelamento_id: null },
+                { conta: "Conta para saldo", id: 1343474, descricao: "Receita pendente", envolvido: "CCC", observacao: null, tipo: "REC", data_transacao: "2022-10-12T03:00:00.000Z", data_pagamento: "2022-10-12T03:00:00.000Z", valor: "3500.00", status: false, conta_id: 1438661, usuario_id: 33074, transferencia_id: null, parcelamento_id: null },
+                { conta: "Conta para saldo", id: 1343475, descricao: "Despesa paga", envolvido: "DDD", observacao: null, tipo: "DESP", data_transacao: "2022-10-12T03:00:00.000Z", data_pagamento: "2022-10-12T03:00:00.000Z", valor: "-1000.00", status: true, conta_id: 1438661, usuario_id: 33074, transferencia_id: null, parcelamento_id: null },
+                { conta: "Conta para saldo", id: 1343476, descricao: "Despesa pendente", envolvido: "EEE", observacao: null, tipo: "DESP", data_transacao: "2022-10-12T03:00:00.000Z", data_pagamento: "2022-10-12T03:00:00.000Z", valor: "1534.00", status: false, conta_id: 1438661, usuario_id: 33074, transferencia_id: null, parcelamento_id: null }]
+        });
+        cy.get(loc.MENU.EXTRACT).click();
+        cy.xpath(loc.EXTRACT.FN_XP_LINE('Receita paga')).should('have.class', 'receitaPaga');
+        cy.xpath(loc.EXTRACT.FN_XP_LINE('Receita pendente')).should('have.class', 'receitaPendente');
+        cy.xpath(loc.EXTRACT.FN_XP_LINE('Despesa paga')).should('have.class', 'despesaPaga');
+        cy.xpath(loc.EXTRACT.FN_XP_LINE('Despesa pendente')).should('have.class', 'despesaPendente');
+
+        cy.xpath(loc.EXTRACT.FN_XP_LINE('Despesa pendente')).should('not.have.class', 'receitaPendente');
+    })
 });
