@@ -377,7 +377,7 @@ describe("Should test at a functional level", () => {
             }]
         }).as('getContasUpdated');
 
-        cy.inserirConta('{CONTROL}');
+        cy.inserirConta('Nova conta');
 
         // Validando dado 'nome' (forma 1)
         //cy.wait('@postContas').its('request.body.nome').should('not.be.empty');
