@@ -13,7 +13,7 @@
         "descricao": "Poupança",
         "valor": 123,
         "interessado": "Manolo da Silva",
-        "conta": "Conta para movimentacoes",
+        "conta": "Conta para alterar",
         "nomeMovimentacaoExclucao": "Movimentacao para exclusao",
         "movParaAlterarSaldo": "Movimentacao 1, calculo saldo"
     },
