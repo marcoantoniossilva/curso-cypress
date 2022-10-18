@@ -327,4 +327,68 @@ describe("Should test at a functional level", () => {
         cy.get(loc.MESSAGE).should('contain', 'Movimentação removida com sucesso!');
 
     });
+
+    it("Should validate data to create an account", () => {
+
+        // Stub para validar dados (forma 3)
+        const reqStub = cy.stub();
+
+        cy.route({
+            method: "POST",
+            url: "/contas",
+            response: {
+                id: 3,
+                nome: "Conta de teste",
+                visivel: true,
+                usuario_id: 1000
+            },
+            //Validando dados no onRequest (forma 2)
+            // onRequest: req => {
+            //     expect(req.request.body.nome).to.be.not.empty;
+            //     expect(req.request.headers).to.have.property('Authorization');
+            // }
+
+            //Validando com Stub (forma 3)
+            onRequest: reqStub
+        }).as('postContas');
+
+        cy.acessarMenuConta();
+
+        cy.route({
+            method: "GET",
+            url: "/contas",
+            response: [{
+                id: 1,
+                nome: "Conta para alterar",
+                visivel: true,
+                usuario_id: 1
+            },
+            {
+                id: 2,
+                nome: "Conta falsa mesmo nome",
+                visivel: true,
+                usuario_id: 1
+            },
+            {
+                id: 3,
+                nome: "Conta de teste",
+                visivel: true,
+                usuario_id: 1
+            }]
+        }).as('getContasUpdated');
+
+        cy.inserirConta('{CONTROL}');
+
+        // Validando dado 'nome' (forma 1)
+        //cy.wait('@postContas').its('request.body.nome').should('not.be.empty');
+
+        //Validando com stub (continuação da Forma 3)
+        cy.wait('@postContas').then(() => {
+            expect(reqStub.args[0][0].request.body.nome).to.be.not.empty;
+            expect(reqStub.args[0][0].request.headers).to.have.property('Authorization');
+        });
+
+        cy.get(loc.MESSAGE).should('contain', 'Conta inserida com sucesso');
+
+    });
 });
